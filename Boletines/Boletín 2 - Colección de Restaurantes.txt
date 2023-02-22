@@ -1,0 +1,57 @@
+mongosh.exe "mongodb+srv://vedruna.ew3gzcd.mongodb.net/testRelampago" --apiVersion 1 --username alumnos
+Password: alumnos12345678
+{
+    _id: ObjectId("63d6c9b038af9837a8a81262"),
+    address: {
+      building: '522',
+      coord: [ -73.95171, 40.767461 ],
+      street: 'East   74 Street',
+      zipcode: '10021'
+    },
+    borough: 'Manhattan',
+    cuisine: 'American ',
+    grades: [
+      {
+        date: ISODate("2014-09-02T00:00:00.000Z"),
+        grade: 'A',
+        score: 12
+      },
+      {
+        date: ISODate("2013-12-19T00:00:00.000Z"),
+        grade: 'B',
+        score: 16
+      },
+      {
+        date: ISODate("2013-05-28T00:00:00.000Z"),
+        grade: 'A',
+        score: 9
+      },
+      {
+        date: ISODate("2012-12-07T00:00:00.000Z"),
+        grade: 'A',
+        score: 13
+      },
+      {
+        date: ISODate("2012-03-29T00:00:00.000Z"),
+        grade: 'A',
+        score: 11
+      }
+    ],
+    name: 'Glorious Food',
+    restaurant_id: '40361521'
+  }
+
+1. Muestre los campos id del restaurante, nombre, distrito y código postal, pero excluya el campo _id para todos los documentos en la colección de los restaurantes.
+db.restaurants.find({},{restaurany_id:1,name:1,borough:1,"address.zipcode":1,_id:0});
+
+2. Muestre  los restaurantes que no preparan ninguna cocina de tipo 'estadounidense' y su puntaje de calificación es superior a 70 y la latitud es inferior a -65.754168
+db.restaurants.find({$and: [{cuisine:{$ne: 'American'}},{"grades.score":{$gt: 70}},{"address.coord.0":{$lt: -65.754168}}]})
+
+3. Muestre la identificación, el nombre, el distrito y el tipo de cocina del restaurante para aquellos restaurantes que contienen 'Wil' como las tres primeras letras de su nombre
+db.restaurants.find({ name: { $regex: /^Wil/ } },{ _id: 1, name: 1, borough: 1, cuisine: 1 })
+
+4. Muestre el nombre de todos los restaurantes en orden ascendente junto con todas las columnas
+cursor = db.restaurants.find().sort({name:1}); 
+
+5. Muestre el nombre del restaurante, distrito, longitud y actitud y cocina para aquellos restaurantes que contienen 'mon' como tres letras en alguna parte de su nombre.
+db.restaurants.find({ name: { $regex: /mon/ } },{  name: 1, borough:1, "address.coord":1,cuisine: 1})
